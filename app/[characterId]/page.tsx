@@ -127,7 +127,7 @@ export default function CharacterPage({ params }: Props) {
               {menus.map((menu) => (
                 <Link
                   key={menu.id}
-                  href={`/${character.id}/${menu.id}`}
+                  href={`/chat?character=${character.id}&menu=${menu.id}`}
                   className="group block bg-white rounded-2xl border-2 border-gray-100 hover:border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 p-5"
                 >
                   <div className="flex items-start gap-3">
@@ -147,7 +147,7 @@ export default function CharacterPage({ params }: Props) {
                     </div>
                   </div>
                   <div className={`mt-3 text-xs font-bold ${character.textColor} flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity`}>
-                    このメニューを使う
+                    💬 チャットで頼む
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
