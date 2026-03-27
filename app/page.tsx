@@ -28,8 +28,14 @@ export default function HomePage() {
             </div>
             <span className="font-black text-lg text-gray-800 ml-1">BOT</span>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-gray-400 bg-gray-100 px-3 py-1.5 rounded-full font-medium">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/chat"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold text-sm px-4 py-2 rounded-xl transition-colors"
+            >
+              💬 チャットで使う
+            </Link>
+            <span className="text-xs text-gray-400 bg-gray-100 px-3 py-1.5 rounded-full font-medium hidden sm:inline">
               AI社員サービス by REQS Lab
             </span>
           </div>
@@ -42,9 +48,18 @@ export default function HomePage() {
           <h1 className="text-2xl md:text-3xl font-black text-gray-800 mb-3">
             担当のAI社員に、仕事を頼もう
           </h1>
-          <p className="text-gray-500 text-base">
+          <p className="text-gray-500 text-base mb-5">
             メニューを選んで入力するだけ。専門AIがすぐに対応します。
           </p>
+          <Link
+            href="/chat"
+            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold px-6 py-3 rounded-2xl transition-colors shadow-sm text-sm"
+          >
+            💬 チャット形式で話しかける
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </Link>
         </div>
 
         {/* AI社員グリッド */}
