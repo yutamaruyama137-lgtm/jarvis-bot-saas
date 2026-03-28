@@ -13,6 +13,10 @@ interface ResultDisplayProps {
   onReset: () => void;
 }
 
+function isHTML(text: string): boolean {
+  return /<!DOCTYPE\s+html/i.test(text) || /<html[\s>]/i.test(text);
+}
+
 export default function ResultDisplay({
   output,
   character,
@@ -21,6 +25,9 @@ export default function ResultDisplay({
   onReset,
 }: ResultDisplayProps) {
   const [copied, setCopied] = useState(false);
+  const [previewMode, setPreviewMode] = useState<"preview" | "code">("preview");
+
+  const htmlOutput = isHTML(output);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(output);
@@ -46,15 +53,58 @@ export default function ResultDisplay({
             <div className={`w-2 h-2 ${character.color} rounded-full animate-pulse`}/>
           </div>
         )}
+        {/* HTMLのときだけプレビュー切り替えタブを表示 */}
+        {htmlOutput && !isStreaming && (
+          <div className="ml-auto flex gap-1 bg-white rounded-lg p-1 shadow-sm border border-gray-100">
+            <button
+              onClick={() => setPreviewMode("preview")}
+              className={`text-xs font-bold px-3 py-1.5 rounded-md transition-colors ${
+                previewMode === "preview"
+                  ? `${character.color} text-white`
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              🖥️ プレビュー
+            </button>
+            <button
+              onClick={() => setPreviewMode("code")}
+              className={`text-xs font-bold px-3 py-1.5 rounded-md transition-colors ${
+                previewMode === "code"
+                  ? `${character.color} text-white`
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              {"</>"} コード
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 出力内容 */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-6">
-        <div className={`prose prose-sm max-w-none text-gray-700 leading-relaxed ${isStreaming ? "cursor-blink" : ""}`}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {output}
-          </ReactMarkdown>
-        </div>
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-soft overflow-hidden">
+        {htmlOutput && previewMode === "preview" && !isStreaming ? (
+          <iframe
+            srcDoc={output}
+            className="w-full border-0"
+            style={{ height: "600px" }}
+            sandbox="allow-scripts allow-same-origin"
+            title="HTMLプレビュー"
+          />
+        ) : (
+          <div className={`p-6 ${isStreaming ? "cursor-blink" : ""}`}>
+            {htmlOutput ? (
+              <pre className="text-xs text-gray-600 overflow-auto whitespace-pre-wrap font-mono leading-relaxed" style={{ maxHeight: "600px" }}>
+                {output}
+              </pre>
+            ) : (
+              <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {output}
+                </ReactMarkdown>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* アクションボタン */}
